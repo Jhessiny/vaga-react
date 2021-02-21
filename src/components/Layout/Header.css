@@ -1,0 +1,22 @@
+.nav-item .nav-link.active {
+  border-bottom: 1px solid #444;
+}
+
+header a {
+  color: #444;
+}
+
+header {
+  position: relative;
+}
+
+.cart-items-ballon {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  top: 3px;
+  right: 2.9rem;
+  border-radius: 100%;
+  color: #fff;
+  text-align: center;
+}

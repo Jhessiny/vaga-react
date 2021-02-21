@@ -1,14 +1,15 @@
+import "./Header.css";
 import { NavLink } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ cartItemsAmount }) => {
   return (
-    <header className="navbar navbar-expand-lg d-flex justify-content-between bg-dark text-light">
+    <header className="navbar navbar-expand-lg d-flex justify-content-between bg-light ">
       <NavLink className="navbar-brand" to="/">
         Futuredeck
       </NavLink>
       <nav>
         <ul className="navbar-nav">
-          <li className="nav-item active">
+          <li className="nav-item">
             <NavLink className="nav-link" to="/user/:id">
               Profile
             </NavLink>
@@ -19,6 +20,9 @@ const Header = () => {
             </NavLink>
           </li>
           <li className="nav-item">
+            <div className="cart-items-ballon bg-primary">
+              {cartItemsAmount}
+            </div>
             <NavLink className="nav-link" to="/cart">
               Cart
             </NavLink>

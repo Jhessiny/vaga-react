@@ -22,7 +22,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <Header cartItemsAmount={cartItems.length} />
       <main>
         <Switch>
           <Route
