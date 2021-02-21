@@ -11,7 +11,6 @@ import Cart from "./Routes/Cart/Cart.jsx";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
-  const [cep, setCep] = useState(null);
 
   const addToCart = (product) => {
     const newItems = [...cartItems];
@@ -79,9 +78,6 @@ function App() {
           />
         </Switch>
       </main>
-      <form action="">
-        <input value={cep} />
-      </form>
 
       <Footer />
     </div>

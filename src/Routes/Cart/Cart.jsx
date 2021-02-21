@@ -1,14 +1,43 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import "./Cart.css";
 
 const Cart = ({ cartItems, cleanCart, removeToCart, setNewAmount }) => {
+  const [totalPriceWithFrete, setTotalPriceWithFrete] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [cep, setCep] = useState(null);
+  const [frete, setFrete] = useState(0);
+  const [cepMessage, setCepMessage] = useState("");
+  const cepInput = useRef("");
 
   useEffect(() => {
     const total = cartItems.reduce((a, c) => a + c.price * c.amount, 0);
     setTotalPrice(total);
   }, [cartItems]);
+
+  useEffect(() => {
+    setTotalPriceWithFrete(parseFloat(totalPrice) + parseFloat(frete));
+  }, [totalPrice, frete]);
+
+  const handleCep = (e) => {
+    console.log("handling cep");
+    e.preventDefault();
+    const cepSearch = cepInput.current.value;
+    setCep(cepSearch);
+    const cepUrl = "http://localhost:5000/cart/" + cepSearch;
+    axios.get(cepUrl).then((data) => {
+      console.log(data.data);
+      if (data.data[0]) {
+        setCepMessage(
+          `O prazo previsto é de ${data.data[0].PrazoEntrega} dia(s) útil(eis). Valor estimado de R$ ${data.data[0].Valor}.`
+        );
+        setFrete(data.data[0].Valor);
+      } else {
+        setCepMessage("Cep invalido");
+        setFrete(0);
+      }
+    });
+  };
 
   return (
     <div className="cart">
@@ -62,9 +91,19 @@ const Cart = ({ cartItems, cleanCart, removeToCart, setNewAmount }) => {
         </p>
       </div>
       <div className="cart__aside">
-        <p>Subtotal: R${totalPrice.toFixed(2)}</p>
-        <p>Frete: </p>{" "}
-        <button className="btn btn-secondary">CalcularFrete</button>
+        <p>
+          Subtotal: R${totalPrice.toFixed(2)} (R$
+          {totalPriceWithFrete.toFixed(2)} com frete)
+        </p>
+        <p className="cart__aside__cep-message">{cepMessage}</p>
+        <form onSubmit={handleCep}>
+          <input
+            value={cep}
+            ref={cepInput}
+            onChange={(e) => setCep(e.target.value)}
+          />
+          <button className="btn btn-secondary">CalcularFrete</button>
+        </form>
         <button className="btn btn-primary disabled">Fazer Pedido</button>
       </div>
     </div>
