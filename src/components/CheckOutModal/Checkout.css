@@ -1,0 +1,71 @@
+.checkout {
+  font-size: 14px;
+}
+
+.checkout h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+}
+
+.checkout h2 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.checkout h3 {
+  margin: 10px 0 5px 0;
+  font-size: 0.9rem;
+}
+
+.checkout__user-data {
+  margin-bottom: 2rem;
+}
+
+.checkout__user-data * {
+  margin: 5px 0;
+}
+
+.checkout__credit-card-form form {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.checkout__input-box {
+  width: 48%;
+  margin-bottom: 1rem;
+}
+
+.checkout__input-box * {
+  display: block;
+  width: 100%;
+}
+
+.checkout__input-box input {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 3px 5px;
+}
+
+.order-summary__item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.order-summary__total-price {
+  font-weight: bold;
+  text-align: right;
+}
+
+.checkout__close-modal {
+  border: none;
+  background-color: transparent;
+}
+
+.checkout-left {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}

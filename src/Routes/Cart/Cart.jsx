@@ -1,14 +1,32 @@
 import { useEffect, useRef, useState } from "react";
+import Modal from "react-modal";
 import axios from "axios";
 import "./Cart.css";
+import CartItems from "../../components/CartItems/CartItems";
+import CartAside from "../../components/CartAside/CartAside";
+import Checkout from "../../components/CheckOutModal/Checkout";
 
-const Cart = ({ cartItems, cleanCart, removeToCart, setNewAmount }) => {
+const Cart = ({ cartItems, cleanCart, removeFromCart, setNewAmount }) => {
   const [totalPriceWithFrete, setTotalPriceWithFrete] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [cep, setCep] = useState(null);
   const [frete, setFrete] = useState(0);
   const [cepMessage, setCepMessage] = useState("");
   const cepInput = useRef("");
+  const [user, setUser] = useState(true);
+  const [isOrdering, setisOrdering] = useState(false);
+
+  const modalCustomStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      width: "500px",
+    },
+  };
 
   useEffect(() => {
     const total = cartItems.reduce((a, c) => a + c.price * c.amount, 0);
@@ -23,6 +41,11 @@ const Cart = ({ cartItems, cleanCart, removeToCart, setNewAmount }) => {
     console.log("handling cep");
     e.preventDefault();
     const cepSearch = cepInput.current.value;
+    if (cepSearch.length > 8 || cepSearch.length < 8) {
+      setCepMessage("Cep invalido");
+      setFrete(0);
+      return;
+    }
     setCep(cepSearch);
     const cepUrl = "http://localhost:5000/cart/" + cepSearch;
     axios.get(cepUrl).then((data) => {
@@ -39,73 +62,46 @@ const Cart = ({ cartItems, cleanCart, removeToCart, setNewAmount }) => {
     });
   };
 
+  const handleOrder = () => {
+    if (!user) {
+      alert("You need to login");
+      return;
+    }
+    setisOrdering(true);
+  };
+
+  const closeOrder = () => {
+    setisOrdering(false);
+  };
+
   return (
     <div className="cart">
-      <div className="cart-items">
-        <div className="cart-items__top">
-          <h2>Carrinho de Compras</h2>
-          {cartItems.length > 0 && (
-            <button className="btn btn-light" onClick={cleanCart}>
-              Limpar Carrinho
-            </button>
-          )}
-        </div>
-        {cartItems.length > 0 ? (
-          <>
-            <p>{cartItems.length} items</p>
-            {cartItems.map((item) => (
-              <div className="cart-item__card">
-                <div className="cart-item__left">
-                  <img className="cart-item__image" src={item.img} alt="" />
-                  <div className="cart-item__card-details">
-                    <p className="cart-item__card__title ">{item.title}</p>
-                    <p>
-                      Amount:
-                      <input
-                        className="cart-item__card__amount"
-                        type="number"
-                        value={item.amount}
-                        onChange={(e) => setNewAmount(e, item)}
-                      />
-                    </p>
-                    <button
-                      onClick={() => removeToCart(item.product_id)}
-                      className="btn btn-secondary"
-                    >
-                      Remover
-                    </button>
-                  </div>
-                </div>
-                <div className="cart-item__card__price">
-                  <p>R${item.price.toFixed(2)}</p>
-                </div>
-              </div>
-            ))}
-          </>
-        ) : (
-          <p>Seu carrinho está vazio.</p>
-        )}
-
-        <p className="cart-item__card__total-price">
-          R${totalPrice.toFixed(2)}
-        </p>
-      </div>
-      <div className="cart__aside">
-        <p>
-          Subtotal: R${totalPrice.toFixed(2)} (R$
-          {totalPriceWithFrete.toFixed(2)} com frete)
-        </p>
-        <p className="cart__aside__cep-message">{cepMessage}</p>
-        <form onSubmit={handleCep}>
-          <input
-            value={cep}
-            ref={cepInput}
-            onChange={(e) => setCep(e.target.value)}
+      <CartItems
+        cartItems={cartItems}
+        cleanCart={cleanCart}
+        setNewAmount={setNewAmount}
+        removeFromCart={removeFromCart}
+        totalPrice={totalPrice}
+      />
+      <CartAside
+        totalPrice={totalPrice}
+        totalPriceWithFrete={totalPriceWithFrete}
+        cepMessage={cepMessage}
+        handleCep={handleCep}
+        cep={cep}
+        cepInput={cepInput}
+        setCep={setCep}
+        handleOrder={handleOrder}
+      />
+      {isOrdering && (
+        <Modal isOpen={true} style={modalCustomStyles}>
+          <Checkout
+            orderItems={cartItems}
+            closeOrder={closeOrder}
+            finalPrice={totalPriceWithFrete}
           />
-          <button className="btn btn-secondary">CalcularFrete</button>
-        </form>
-        <button className="btn btn-primary disabled">Fazer Pedido</button>
-      </div>
+        </Modal>
+      )}
     </div>
   );
 };

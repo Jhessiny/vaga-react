@@ -28,7 +28,7 @@ function App() {
     setCartItems(newItems);
   };
 
-  const removeToCart = (itemId) => {
+  const removeFromCart = (itemId) => {
     const newItems = [...cartItems];
     const filteredItems = newItems.filter((item) => item.product_id !== itemId);
 
@@ -48,7 +48,7 @@ function App() {
     });
     setCartItems(newItems);
     if (product.amount <= 0) {
-      removeToCart(product.product_id);
+      removeFromCart(product.product_id);
     }
   };
 
@@ -67,7 +67,7 @@ function App() {
               <Cart
                 cartItems={cartItems}
                 cleanCart={cleanCart}
-                removeToCart={removeToCart}
+                removeFromCart={removeFromCart}
                 setNewAmount={setNewAmount}
               />
             )}

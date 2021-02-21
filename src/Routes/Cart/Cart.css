@@ -54,11 +54,27 @@
   width: 28%;
   background-color: #fff;
   padding: 1rem;
-  height: 13rem;
+  height: 12rem;
 }
 
 .cart__aside .btn-primary {
   margin-top: 1rem;
+}
+
+.cart__aside .btn-secondary,
+.cart__aside input {
+  height: 30px;
+  padding: 3px 10px;
+  font-size: 14px;
+  border-radius: 0 4px 4px 0;
+  margin-top: -3px;
+}
+
+.cart__aside input {
+  margin-top: 0px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  width: 9rem;
 }
 
 .cart__aside__cep-message {
@@ -66,4 +82,7 @@
   font-size: 0.7rem;
   display: block;
   min-height: 2rem;
+  margin: 0;
+  padding: 0;
+  line-height: 10px;
 }
