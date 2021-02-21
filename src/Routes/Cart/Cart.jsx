@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import "./Cart.css";
 
-const Cart = ({ cartItems }) => {
+const Cart = ({ cartItems, cleanCart, removeToCart, setNewAmount }) => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
@@ -16,7 +16,9 @@ const Cart = ({ cartItems }) => {
         <div className="cart-items__top">
           <h2>Carrinho de Compras</h2>
           {cartItems.length > 0 && (
-            <button className="btn btn-light">Limpar Carrinho</button>
+            <button className="btn btn-light" onClick={cleanCart}>
+              Limpar Carrinho
+            </button>
           )}
         </div>
         {cartItems.length > 0 ? (
@@ -30,13 +32,19 @@ const Cart = ({ cartItems }) => {
                     <p className="cart-item__card__title ">{item.title}</p>
                     <p>
                       Amount:
-                      <select name="amount" id="">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                      </select>
+                      <input
+                        className="cart-item__card__amount"
+                        type="number"
+                        value={item.amount}
+                        onChange={(e) => setNewAmount(e, item)}
+                      />
                     </p>
-                    <button className="btn btn-secondary">Remover</button>
+                    <button
+                      onClick={() => removeToCart(item.product_id)}
+                      className="btn btn-secondary"
+                    >
+                      Remover
+                    </button>
                   </div>
                 </div>
                 <div className="cart-item__card__price">

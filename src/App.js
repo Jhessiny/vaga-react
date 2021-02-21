@@ -11,13 +11,46 @@ import Cart from "./Routes/Cart/Cart.jsx";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
+  const [cep, setCep] = useState(null);
 
-  const addToCart = (item) => {
+  const addToCart = (product) => {
     const newItems = [...cartItems];
-    let newItem = { ...item, amount: 1 };
-    newItems.push(newItem);
+    let alreadyExists = false;
+    newItems.forEach((item) => {
+      if (item.product_id == product.product_id) {
+        item.amount += 1;
+        alreadyExists = true;
+      }
+    });
+    if (!alreadyExists) {
+      let newItem = { ...product, amount: 1 };
+      newItems.push(newItem);
+    }
     setCartItems(newItems);
-    console.log(newItems);
+  };
+
+  const removeToCart = (itemId) => {
+    const newItems = [...cartItems];
+    const filteredItems = newItems.filter((item) => item.product_id !== itemId);
+
+    setCartItems(filteredItems);
+  };
+
+  const cleanCart = () => {
+    setCartItems([]);
+  };
+
+  const setNewAmount = (e, product) => {
+    const newItems = [...cartItems];
+    newItems.forEach((item) => {
+      if (item.product_id == product.product_id) {
+        product.amount = e.target.value;
+      }
+    });
+    setCartItems(newItems);
+    if (product.amount <= 0) {
+      removeToCart(product.product_id);
+    }
   };
 
   return (
@@ -29,13 +62,26 @@ function App() {
             path="/shop"
             render={() => <Shop products={products} addToCart={addToCart} />}
           />
-          <Route path="/cart" render={() => <Cart cartItems={cartItems} />} />
+          <Route
+            path="/cart"
+            render={() => (
+              <Cart
+                cartItems={cartItems}
+                cleanCart={cleanCart}
+                removeToCart={removeToCart}
+                setNewAmount={setNewAmount}
+              />
+            )}
+          />
           <Route
             path="/:id"
             render={() => <ProductPage addToCart={addToCart} />}
           />
         </Switch>
       </main>
+      <form action="">
+        <input value={cep} />
+      </form>
 
       <Footer />
     </div>

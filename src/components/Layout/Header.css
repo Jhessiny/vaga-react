@@ -10,12 +10,16 @@ header {
   position: relative;
 }
 
+.navbar {
+  padding: 0.8rem 1.8rem;
+}
+
 .cart-items-ballon {
   width: 25px;
   height: 25px;
   position: absolute;
-  top: 3px;
-  right: 2.9rem;
+  top: 7px;
+  right: 15px;
   border-radius: 100%;
   color: #fff;
   text-align: center;
